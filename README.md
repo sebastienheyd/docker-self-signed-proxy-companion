@@ -4,6 +4,8 @@
 
 self-signed-certificate-nginx-proxy-companion is a lightweight companion container for the [nginx-proxy](https://github.com/jwilder/nginx-proxy). It allows the creation of self-signed certificates automatically.
 
+If you need to set Let's Encrypt certificates for production, see : [docker-letsencrypt-nginx-proxy-companion](https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion).
+
 ## Features
 
 * Automatic creation self-signed certificates with a **20 years validity period** (!) using original [nginx-proxy](https://github.com/jwilder/nginx-proxy) container.
