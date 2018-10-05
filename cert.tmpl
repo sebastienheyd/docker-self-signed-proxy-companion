@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+reload_nginx=false
+
+{{ range $hosts, $containers := groupBy $ "Env.SELF_SIGNED_HOST" }}
+
+{{ range $host := split $hosts "," }}
+
+{{ $host := trim $host }}
+if [ ! -f /etc/nginx/certs/{{ $host }}.crt ]; then
+    echo "=== Generating self-signed certificate for {{ $host }} ================"
+
+    echo "authorityKeyIdentifier=keyid,issuer
+    basicConstraints=CA:FALSE
+    keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+    subjectAltName = @alt_names
+    [alt_names]
+    DNS.1={{ $host }}" > /etc/nginx/certs/{{ $host }}.ext
+
+    openssl req -new -sha256 -nodes -out /etc/nginx/certs/{{ $host }}.csr -newkey rsa:2048 -keyout /etc/nginx/certs/{{ $host }}.key -subj "/CN={{ $host }}"
+    openssl x509 -req -in /etc/nginx/certs/{{ $host }}.csr -CA /etc/nginx/certs/ca.crt -CAkey /etc/nginx/certs/ca.key -CAcreateserial -out /etc/nginx/certs/{{ $host }}.crt -days 7300 -sha256 -extfile /etc/nginx/certs/{{ $host }}.ext
+
+    rm /etc/nginx/certs/{{ $host }}.ext /etc/nginx/certs/{{ $host }}.csr /etc/nginx/certs/ca.srl
+
+    reload_nginx=true
+fi
+
+{{ end }}
+
+{{ end }}
+
+if [ $reload_nginx = true ]; then
+    echo "=== Reload nginx ================"
+    docker exec $NGINX_PROXY_CONTAINER sh -c 'docker-gen -notify "nginx -s reload" /app/nginx.tmpl /etc/nginx/conf.d/default.conf'
+fi
