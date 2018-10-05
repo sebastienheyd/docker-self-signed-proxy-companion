@@ -31,5 +31,6 @@ fi
 
 if [ $reload_nginx = true ]; then
     echo "=== Reload nginx ================"
-    docker exec $NGINX_PROXY_CONTAINER sh -c 'docker-gen -notify "nginx -s reload" /app/nginx.tmpl /etc/nginx/conf.d/default.conf'
+    source /app/functions.sh
+    reload_nginx
 fi
