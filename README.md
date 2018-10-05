@@ -35,7 +35,7 @@ $ docker run -d \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
     -v /path/to/certs:/etc/nginx/certs:rw \
     -e "NGINX_PROXY_CONTAINER=nginx-proxy"
-    sebastienheyd/self-signed-certificate-nginx-proxy-companion
+    sebastienheyd/self-signed-proxy-companion
 ```
 
 * Then start any proxied containers with an additional env var `SELF_SIGNED_HOST`
@@ -73,7 +73,7 @@ services:
     proxy-companion:        
         container_name: proxy-companion
         restart: always
-        image: sebastienheyd/self-signed-certificate-nginx-proxy-companion
+        image: sebastienheyd/self-signed-proxy-companion
         environment:
             NGINX_PROXY_CONTAINER: proxy
         volumes:
