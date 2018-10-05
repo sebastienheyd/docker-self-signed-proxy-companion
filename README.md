@@ -61,7 +61,7 @@ services:
     proxy:
         container_name: proxy
         restart: always
-        image: jwilder/nginx-proxy:latest
+        image: jwilder/nginx-proxy
         ports:
             - "80:80"
             - "443:443"
@@ -106,6 +106,8 @@ networks:
     proxy:
         external: true
 ```
+
+**Note** : in this example `SELF_SIGNED_HOST` value `example.com` will cover `*.example.com`, you don't have to add all FQDN. See [wildcard](https://github.com/jwilder/nginx-proxy#wildcard-certificates) documentation.
 
 ## Trust self-signed certificates
 
