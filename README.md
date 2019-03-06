@@ -40,15 +40,17 @@ $ docker run -d \
     sebastienheyd/self-signed-proxy-companion
 ```
 
+**Note**  : by default `NGINX_PROXY_CONTAINER` = proxy, if your proxy container name is `proxy` you don't have to specify the name.
+
 * Then start any proxied containers with an additional env var `SELF_SIGNED_HOST`
 ```bash
 $ docker run -d \
     --name example-app \
-    -e "VIRTUAL_HOST=example.com,www.example.com,mail.example.com" \
-    -e "SELF_SIGNED_HOST=example.com" \
+    -e "VIRTUAL_HOST=example.com.localhost,www.example.com.localhost,mail.example.com.localhost" \
+    -e "SELF_SIGNED_HOST=example.com.localhost" \
     tutum/apache-php
 ```
-**Note** : in this example `SELF_SIGNED_HOST` value `example.com` will cover `*.example.com`, you don't have to add all FQDN. See [wildcard](https://github.com/jwilder/nginx-proxy#wildcard-certificates) documentation.
+**Note** : in this example `SELF_SIGNED_HOST` value `example.com.localhost` will cover `*.example.com.localhost`, you don't have to add all FQDN. See [wildcard](https://github.com/jwilder/nginx-proxy#wildcard-certificates) documentation.
 
 #### With docker-compose :
 
@@ -76,8 +78,6 @@ services:
         container_name: proxy-companion
         restart: always
         image: sebastienheyd/self-signed-proxy-companion
-        environment:
-            NGINX_PROXY_CONTAINER: proxy
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - ./certs:/etc/nginx/certs
@@ -97,8 +97,8 @@ services:
         container_name: example-app
         image: tutum/apache-php:latest
         environment:
-            VIRTUAL_HOST: "example.com,www.example.com,mail.example.com"
-            SELF_SIGNED_HOST: "example.com"
+            VIRTUAL_HOST: "example.com.localhost,www.example.com.localhost,mail.example.com.localhost"
+            SELF_SIGNED_HOST: "example.com.localhost"
         networks:
             - proxy
 
@@ -107,7 +107,7 @@ networks:
         external: true
 ```
 
-**Note** : in this example `SELF_SIGNED_HOST` value `example.com` will cover `*.example.com`, you don't have to add all FQDN. See [wildcard](https://github.com/jwilder/nginx-proxy#wildcard-certificates) documentation.
+**Note** : in this example `SELF_SIGNED_HOST` value `example.com.localhost` will cover `*.example.com.localhost`, you don't have to add all FQDN. See [wildcard](https://github.com/jwilder/nginx-proxy#wildcard-certificates) documentation.
 
 ## Trust self-signed certificates
 
