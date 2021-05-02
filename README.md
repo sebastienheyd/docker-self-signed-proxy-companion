@@ -8,7 +8,7 @@ If you need to set Let's Encrypt certificates for production, see : [docker-lets
 
 ## Features
 
-* Automatic creation self-signed certificates with a **20 years validity period** (!) using original [nginx-proxy](https://github.com/jwilder/nginx-proxy) container.
+* Automatic creation self-signed certificates with a **10 years validity period** (by default) using original [nginx-proxy](https://github.com/jwilder/nginx-proxy) container.
 * Automatic creation of a certificate autority (CA) to trust your self-signed certificates
 
 ## Usage
@@ -35,14 +35,12 @@ $ docker run -d -p 80:80 -p 443:443 \
 $ docker run -d \
     --name proxy-companion \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
-    -v /path/to/certs:/etc/nginx/certs:rw \
-    -e "NGINX_PROXY_CONTAINER=nginx-proxy"
+    -v /path/to/certs:/etc/nginx/certs:rw
     sebastienheyd/self-signed-proxy-companion
 ```
 
-**Note**  : by default `NGINX_PROXY_CONTAINER` = proxy, if your proxy container name is `proxy` you don't have to specify the name.
-
 * Then start any proxied containers with an additional env var `SELF_SIGNED_HOST`
+
 ```bash
 $ docker run -d \
     --name example-app \
@@ -108,6 +106,14 @@ networks:
 ```
 
 **Note** : in this example `SELF_SIGNED_HOST` value `example.com.localhost` will cover `*.example.com.localhost`, you don't have to add all FQDN. See [wildcard](https://github.com/jwilder/nginx-proxy#wildcard-certificates) documentation.
+
+## Environment variables
+
+| Variable | Default value | Description |
+| --- | --- | --- |
+| NGINX_PROXY_CONTAINER | proxy | jwilder/nginx-proxy container name |
+| EXPIRATION | 3650 | Certificates validity period (in days) |
+| DOCKER_HOST | unix:///var/run/docker.sock | Path to the docker sock in current container |
 
 ## Trust self-signed certificates
 

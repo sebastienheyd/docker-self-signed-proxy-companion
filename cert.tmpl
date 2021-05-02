@@ -18,7 +18,7 @@ if [ ! -f /etc/nginx/certs/{{ $host }}.crt ]; then
     DNS.1={{ $host }}" > /etc/nginx/certs/{{ $host }}.ext
 
     openssl req -new -sha256 -nodes -out /etc/nginx/certs/{{ $host }}.csr -newkey rsa:2048 -keyout /etc/nginx/certs/{{ $host }}.key -subj "/CN={{ $host }}"
-    openssl x509 -req -in /etc/nginx/certs/{{ $host }}.csr -CA /etc/nginx/certs/ca.crt -CAkey /etc/nginx/certs/ca.key -CAcreateserial -out /etc/nginx/certs/{{ $host }}.crt -days 7300 -sha256 -extfile /etc/nginx/certs/{{ $host }}.ext
+    openssl x509 -req -in /etc/nginx/certs/{{ $host }}.csr -CA /etc/nginx/certs/ca.crt -CAkey /etc/nginx/certs/ca.key -CAcreateserial -out /etc/nginx/certs/{{ $host }}.crt -days EXPIRATION -sha256 -extfile /etc/nginx/certs/{{ $host }}.ext
 
     rm /etc/nginx/certs/{{ $host }}.ext /etc/nginx/certs/{{ $host }}.csr /etc/nginx/certs/ca.srl
 
