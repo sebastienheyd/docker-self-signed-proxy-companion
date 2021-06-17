@@ -7,7 +7,7 @@ RUN apk add --no-cache \
         jq \
         openssl
 
-RUN DOCKER_GEN_VERSION=$(curl -s https://api.github.com/repos/jwilder/docker-gen/releases/latest | grep 'tag_name' | cut -d\" -f4) \
+RUN DOCKER_GEN_VERSION=$(curl -sL https://api.github.com/repos/jwilder/docker-gen/releases/latest | grep 'tag_name' | cut -d\" -f4) \
     && wget https://github.com/jwilder/docker-gen/releases/download/$DOCKER_GEN_VERSION/docker-gen-linux-amd64-$DOCKER_GEN_VERSION.tar.gz \
     && tar xvzf docker-gen-linux-amd64-$DOCKER_GEN_VERSION.tar.gz -C /usr/local/bin \
     && rm docker-gen-linux-amd64-$DOCKER_GEN_VERSION.tar.gz
