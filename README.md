@@ -35,7 +35,7 @@ $ docker run -d -p 80:80 -p 443:443 \
 $ docker run -d \
     --name proxy-companion \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
-    -v /path/to/certs:/etc/nginx/certs:rw
+    -v /path/to/certs:/etc/nginx/certs:rw \
     sebastienheyd/self-signed-proxy-companion
 ```
 
