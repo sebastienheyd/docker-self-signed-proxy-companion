@@ -1,10 +1,13 @@
+[![Docker stars](https://img.shields.io/docker/image-size/sebastienheyd/self-signed-proxy-companion.svg?sort=semver)](https://hub.docker.com/repository/docker/sebastienheyd/self-signed-proxy-companion)
+[![Docker pulls](https://img.shields.io/docker/pulls/sebastienheyd/self-signed-proxy-companion.svg)](https://hub.docker.com/repository/docker/sebastienheyd/self-signed-proxy-companion)
+
 # Self-signed certificate companion for Nginx-Proxy
 
 **WARNING ! Self-signed certificates should only be used on local projects !**
 
-self-signed-certificate-nginx-proxy-companion is a lightweight companion container for the [nginx-proxy](https://github.com/jwilder/nginx-proxy). It allows the creation of self-signed certificates automatically.
+self-signed-certificate-nginx-proxy-companion is a lightweight companion container for the [nginx-proxy](https://github.com/nginx-proxy/nginx-proxy). It allows the creation of self-signed certificates automatically.
 
-If you need to set Let's Encrypt certificates for production, see : [docker-letsencrypt-nginx-proxy-companion](https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion).
+If you need to set Let's Encrypt certificates for production, see : [acme-companion](https://github.com/nginx-proxy/acme-companion).
 
 ## Features
 
@@ -13,7 +16,7 @@ If you need to set Let's Encrypt certificates for production, see : [docker-lets
 
 ## Usage
 
-To use it with original [nginx-proxy](https://github.com/jwilder/nginx-proxy) container you must declare 2 volumes :
+To use it with original [nginx-proxy](https://github.com/nginx-proxy/nginx-proxy) container you must declare 2 volumes :
 
 * `/var/run/docker.sock` (read only) to access docker socket
 * `/etc/nginx/certs` (writable) to create self-signed certificates
@@ -114,6 +117,7 @@ networks:
 | NGINX_PROXY_CONTAINER | proxy | jwilder/nginx-proxy container name |
 | EXPIRATION | 3650 | Certificates validity period (in days) |
 | DOCKER_HOST | unix:///var/run/docker.sock | Path to the docker sock in current container |
+| ARCH | amd64 | Architecture to use for docker-gen (amd64, arm64, armhf, armel, i386) |
 
 ## Trust self-signed certificates
 
