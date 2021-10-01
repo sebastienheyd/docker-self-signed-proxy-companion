@@ -117,7 +117,22 @@ networks:
 | NGINX_PROXY_CONTAINER | proxy | jwilder/nginx-proxy container name |
 | EXPIRATION | 3650 | Certificates validity period (in days) |
 | DOCKER_HOST | unix:///var/run/docker.sock | Path to the docker sock in current container |
-| ARCH | amd64 | Architecture to use for docker-gen (amd64, arm64, armhf, armel, i386) |
+
+## Architecture
+
+By default this container is built for the `amd64` architecture
+
+But you can build it for another architecture (amd64, arm64, armhf, armel, i386) by specifying the `ARCH` argument
+
+```
+docker build --no-cache --build-arg ARCH=arm64 -t sebastienheyd/self-signed-proxy-companion .
+```
+
+or by using `make`
+
+```
+make build ARCH=arm64
+```
 
 ## Trust self-signed certificates
 
