@@ -11,7 +11,7 @@ If you need to set Let's Encrypt certificates for production, see : [acme-compan
 
 ## Features
 
-* Automatic creation self-signed certificates with a **10 years validity period** (by default) using original [nginx-proxy](https://github.com/jwilder/nginx-proxy) container.
+* Automatic creation self-signed certificates with a **10 years validity period** (by default) using original [nginx-proxy](https://github.com/nginx-proxy/nginx-proxy) container.
 * Automatic creation of a certificate autority (CA) to trust your self-signed certificates
 
 ## Usage
@@ -30,7 +30,7 @@ $ docker run -d -p 80:80 -p 443:443 \
     -v /var/run/docker.sock:/tmp/docker.sock:ro \
     -v /path/to/certs:/etc/nginx/certs:ro \
     -v /etc/nginx/vhost.d \
-    jwilder/nginx-proxy
+    nginxproxy/nginx-proxy
 ```
 
 * Second start this container:
@@ -51,7 +51,7 @@ $ docker run -d \
     -e "SELF_SIGNED_HOST=example.com.localhost" \
     tutum/apache-php
 ```
-**Note** : in this example `SELF_SIGNED_HOST` value `example.com.localhost` will cover `*.example.com.localhost`, you don't have to add all FQDN. See [wildcard](https://github.com/jwilder/nginx-proxy#wildcard-certificates) documentation.
+**Note** : in this example `SELF_SIGNED_HOST` value `example.com.localhost` will cover `*.example.com.localhost`, you don't have to add all FQDN. See [wildcard](https://github.com/nginx-proxy/nginx-proxy#wildcard-certificates) documentation.
 
 #### With docker-compose :
 
@@ -64,14 +64,14 @@ services:
     proxy:
         container_name: proxy
         restart: always
-        image: jwilder/nginx-proxy
+        image: nginxproxy/nginx-proxy
         ports:
             - "80:80"
             - "443:443"
         volumes:
             - /var/run/docker.sock:/tmp/docker.sock:ro
             - ./vhost.d:/etc/nginx/vhost.d
-            - ./certs:/etc/nginx/certs
+            - ./certs:/etc/nginx/certs:ro
         networks:
             - proxy
 
@@ -81,7 +81,7 @@ services:
         image: sebastienheyd/self-signed-proxy-companion
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
-            - ./certs:/etc/nginx/certs
+            - ./certs:/etc/nginx/certs:rw
 
 networks:
     proxy:
@@ -108,13 +108,13 @@ networks:
         external: true
 ```
 
-**Note** : in this example `SELF_SIGNED_HOST` value `example.com.localhost` will cover `*.example.com.localhost`, you don't have to add all FQDN. See [wildcard](https://github.com/jwilder/nginx-proxy#wildcard-certificates) documentation.
+**Note** : in this example `SELF_SIGNED_HOST` value `example.com.localhost` will cover `*.example.com.localhost`, you don't have to add all FQDN. See [wildcard](https://github.com/nginx-proxy/nginx-proxy#wildcard-certificates) documentation.
 
 ## Environment variables
 
 | Variable | Default value | Description |
 | --- | --- | --- |
-| NGINX_PROXY_CONTAINER | proxy | jwilder/nginx-proxy container name |
+| NGINX_PROXY_CONTAINER | proxy | nginxproxy/nginx-proxy container name |
 | EXPIRATION | 3650 | Certificates validity period (in days) |
 | DOCKER_HOST | unix:///var/run/docker.sock | Path to the docker sock in current container |
 
