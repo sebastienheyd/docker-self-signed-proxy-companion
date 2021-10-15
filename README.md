@@ -148,7 +148,7 @@ There are several ways to import a CA certificate, here are two of them.
 - Go to `Authorities` and import `ca.crt`
 - Check `Trust the CA to identify websites`
 
-A quicker solution is to allow insecure certificates for *.localhost domains : chrome://flags/#allow-insecure-localhost
+A quicker solution is to allow insecure certificates for `*.localhost` domains : `chrome://flags/#allow-insecure-localhost`
 
 ##### Firefox
 
