@@ -144,14 +144,14 @@ There are several ways to import a CA certificate, here are two of them.
 
 ##### Chrome
 
-Go to : `chrome://settings/certificates`
+- Go to : `chrome://settings/certificates`
+- Go to `Authorities` and import `ca.crt`
+- Check `Trust the CA to identify websites`
 
-Go to `Trusted Root Certification Authorities` and import `ca.crt`
+A quicker solution is to allow insecure certificates for *.localhost domains : chrome://flags/#allow-insecure-localhost
 
 ##### Firefox
 
-Go to `about:config#privacy`
-
-On the bottom of the page, click on `View certificates`, select `Authorities` > `Import` then browse to `ca.crt`.
-
-Check `Trust the CA to identify websites`
+- Go to `about:config#privacy`
+- At the bottom of the page, click on `View certificates`, select `Authorities` > `Import` then browse to `ca.crt`.
+- Check `Trust the CA to identify websites`
