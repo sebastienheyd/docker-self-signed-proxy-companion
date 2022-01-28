@@ -143,6 +143,6 @@ A quicker solution, but less secure, is to allow insecure certificates for `*.lo
 
 ##### Firefox
 
-- Go to `about:config#privacy` or to `about:preferences#privacy`in newer versions
+- Go to `about:config#privacy` or to `about:preferences#privacy` in newer versions
 - At the bottom of the page, click on `View certificates`, select `Authorities` > `Import` then browse to `ca.crt`.
 - Check `Trust the CA to identify websites`
