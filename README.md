@@ -128,6 +128,13 @@ There are several ways to import a CA certificate, here are two of them.
 
 ##### Chrome
 
+For MacOS:
+- open `Keychain Access`
+- drag and drop `ca.crt`
+- double clik certificate (can be found by typing `nginx` in search box)
+- expand `Trust` in first dropdown select `Always Trust`
+
+Other:
 - Go to : `chrome://settings/certificates`
 - Go to `Authorities` and import `ca.crt`
 - Check `Trust the CA to identify websites`
@@ -136,6 +143,6 @@ A quicker solution, but less secure, is to allow insecure certificates for `*.lo
 
 ##### Firefox
 
-- Go to `about:config#privacy`
+- Go to `about:config#privacy` or to `about:preferences#privacy`in newer versions
 - At the bottom of the page, click on `View certificates`, select `Authorities` > `Import` then browse to `ca.crt`.
 - Check `Trust the CA to identify websites`
