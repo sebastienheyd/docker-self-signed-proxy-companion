@@ -7,5 +7,16 @@ help:
 build: ## Build docker image
 	docker build --no-cache -t sebastienheyd/self-signed-proxy-companion .
 
-buildx: ## Build multiarch and push docker image
+multiarch: ## Install multiarch
+	docker pull multiarch/qemu-user-static
+	docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+	docker buildx rm builder
+	docker buildx create --name builder --driver docker-container --use
+	docker buildx inspect --bootstrap
+
+buildx: ## Build multiarch
+	docker buildx build --no-cache --platform linux/arm64,linux/amd64 -t sebastienheyd/self-signed-proxy-companion:latest .
+	docker buildx build --load -t sebastienheyd/self-signed-proxy-companion:latest .
+
+buildxpush: ## Build multiarch and push docker image
 	docker buildx build --push --no-cache --platform linux/arm64,linux/amd64 -t sebastienheyd/self-signed-proxy-companion:latest .

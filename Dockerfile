@@ -1,24 +1,17 @@
+FROM nginxproxy/docker-gen:0.9.0 AS docker-gen
 FROM alpine:latest
 
-RUN apk add --no-cache \
+RUN apk add --no-cache --virtual .bin-deps \
     bash \
     curl \
     wget \
     jq \
     openssl
 
-RUN case $(apk --print-arch) in \
-	"aarch64") export ARCH="arm64" ;; \
-	"x86_64") export ARCH="amd64" ;; \
-    esac; \
-    DOCKER_GEN_VERSION=$(curl -sL https://api.github.com/repos/jwilder/docker-gen/releases/latest | grep 'tag_name' | cut -d\" -f4) \
-    && echo $ARCH \
-    && wget https://github.com/jwilder/docker-gen/releases/download/$DOCKER_GEN_VERSION/docker-gen-linux-$ARCH-$DOCKER_GEN_VERSION.tar.gz \
-    && tar xvzf docker-gen-linux-$ARCH-$DOCKER_GEN_VERSION.tar.gz -C /usr/local/bin \
-    && rm docker-gen-linux-$ARCH-$DOCKER_GEN_VERSION.tar.gz
-
 WORKDIR /app
 ADD . /app
+
+COPY --from=docker-gen /usr/local/bin/docker-gen /usr/local/bin/
 
 ENV DOCKER_HOST unix:///var/run/docker.sock
 ENV NGINX_PROXY_CONTAINER proxy
