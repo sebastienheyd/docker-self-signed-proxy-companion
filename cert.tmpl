@@ -29,6 +29,47 @@ fi
 
 {{ end }}
 
+# Generate global client certificate
+if [ ! -f /etc/nginx/certs/client.crt ]; then
+    echo "=== Generating client certificate ================"
+    
+    # Generate client private key
+    openssl genrsa -out /etc/nginx/certs/client.key 2048
+    
+    # Create certificate signing request
+    openssl req -new -key /etc/nginx/certs/client.key \
+        -out /etc/nginx/certs/client.csr \
+        -subj "/CN=client/O=Client Certificate"
+    
+    # Create extension file for client certificate
+    echo "authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+extendedKeyUsage = clientAuth" > /etc/nginx/certs/client.ext
+    
+    # Sign certificate with CA
+    openssl x509 -req -in /etc/nginx/certs/client.csr \
+        -CA /etc/nginx/certs/ca.crt \
+        -CAkey /etc/nginx/certs/ca.key \
+        -CAcreateserial \
+        -out /etc/nginx/certs/client.crt \
+        -days EXPIRATION \
+        -sha256 \
+        -extfile /etc/nginx/certs/client.ext
+    
+    # Create PKCS#12 file
+    openssl pkcs12 -export -out /etc/nginx/certs/client.p12 \
+        -inkey /etc/nginx/certs/client.key \
+        -in /etc/nginx/certs/client.crt \
+        -certfile /etc/nginx/certs/ca.crt \
+        -passout pass:
+    
+    # Clean up temporary files
+    rm /etc/nginx/certs/client.csr /etc/nginx/certs/client.ext /etc/nginx/certs/ca.srl
+    
+    echo "Client certificate generated successfully"
+fi
+
 if [ $reload_nginx = true ]; then
     echo "=== Reload nginx ================"
     source /app/functions.sh

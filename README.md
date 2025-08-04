@@ -13,6 +13,7 @@ If you need to set Let's Encrypt certificates for production, see : [acme-compan
 
 * Automatic creation self-signed certificates with a **10 years validity period** (by default) using original [nginx-proxy](https://github.com/nginx-proxy/nginx-proxy) container.
 * Automatic creation of a certificate autority (CA) to trust your self-signed certificates
+* **NEW (nginx-proxy >= 1.8)**: Automatic generation of client certificates for mutual TLS (mTLS) authentication
 
 ## Usage
 
@@ -146,3 +147,50 @@ A quicker solution, but less secure, is to allow insecure certificates for `*.lo
 - Go to `about:config#privacy` or to `about:preferences#privacy` in newer versions
 - At the bottom of the page, click on `View certificates`, select `Authorities` > `Import` then browse to `ca.crt`.
 - Check `Trust the CA to identify websites`
+
+## Client Certificate Authentication (nginx-proxy >= 1.8)
+
+Starting with nginx-proxy version 1.8, this companion automatically generates client certificates for mutual TLS authentication. The following files are created in your `certs` folder:
+
+- `client.crt` - Client certificate
+- `client.key` - Client private key  
+- `client.p12` - PKCS#12 format for browser import
+
+### Using Client Certificates
+
+To use client certificate authentication, import the `client.p12` file into your browser's certificate store. The browser will then automatically present this certificate when accessing sites that require it.
+
+### Disabling Client Certificate Verification
+
+For services that should not require client certificates, add the `com.github.nginx-proxy.nginx-proxy.ssl_verify_client=off` label:
+
+```bash
+$ docker run -d \
+    --name example-app \
+    -e "VIRTUAL_HOST=example.com.localhost" \
+    -e "SELF_SIGNED_HOST=example.com.localhost" \
+    --label "com.github.nginx-proxy.nginx-proxy.ssl_verify_client=off" \
+    tutum/apache-php
+```
+
+Or with docker-compose:
+
+```yml
+services:
+    app:
+        container_name: example-app
+        image: tutum/apache-php:latest
+        environment:
+            VIRTUAL_HOST: "example.com.localhost"
+            SELF_SIGNED_HOST: "example.com.localhost"
+        labels:
+            - "com.github.nginx-proxy.nginx-proxy.ssl_verify_client=off"
+        networks:
+            - proxy
+
+networks:
+    proxy:
+        external: true
+```
+
+This ensures that the service remains accessible via standard HTTPS without requiring client certificate installation.
