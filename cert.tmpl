@@ -7,6 +7,8 @@ reload_nginx=false
 {{ range $host := split $hosts "," }}
 
 {{ $host := trim $host }}
+{{ $host := printf "%q" $host }}
+
 if [ ! -f /etc/nginx/certs/{{ $host }}.crt ]; then
     echo "=== Generating self-signed certificate for {{ $host }} ================"
 
