@@ -7,7 +7,7 @@ reload_nginx=false
 {{ range $host := split $hosts "," }}
 
 {{ $host := trim $host }}
-if [ ! -f /etc/nginx/certs/{{ $host }}.crt ]; then
+if [ ! -f "/etc/nginx/certs/{{ $host }}.crt" ]; then
     echo "=== Generating self-signed certificate for {{ $host }} ================"
 
     echo "authorityKeyIdentifier=keyid,issuer
@@ -15,12 +15,12 @@ if [ ! -f /etc/nginx/certs/{{ $host }}.crt ]; then
     keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
     subjectAltName = @alt_names
     [alt_names]
-    DNS.1={{ $host }}" > /etc/nginx/certs/{{ $host }}.ext
+    DNS.1={{ $host }}" > "/etc/nginx/certs/{{ $host }}.ext"
 
-    openssl req -new -sha256 -nodes -out /etc/nginx/certs/{{ $host }}.csr -newkey rsa:2048 -keyout /etc/nginx/certs/{{ $host }}.key -subj "/CN={{ $host }}"
-    openssl x509 -req -in /etc/nginx/certs/{{ $host }}.csr -CA /etc/nginx/certs/nginx-proxy-ca.crt -CAkey /etc/nginx/certs/nginx-proxy-ca.key -CAcreateserial -out /etc/nginx/certs/{{ $host }}.crt -days EXPIRATION -sha256 -extfile /etc/nginx/certs/{{ $host }}.ext
+    openssl req -new -sha256 -nodes -out "/etc/nginx/certs/{{ $host }}.csr" -newkey rsa:2048 -keyout "/etc/nginx/certs/{{ $host }}.key" -subj "/CN={{ $host }}"
+    openssl x509 -req -in "/etc/nginx/certs/{{ $host }}.csr" -CA /etc/nginx/certs/nginx-proxy-ca.crt -CAkey /etc/nginx/certs/nginx-proxy-ca.key -CAcreateserial -out "/etc/nginx/certs/{{ $host }}.crt" -days EXPIRATION -sha256 -extfile "/etc/nginx/certs/{{ $host }}.ext"
 
-    rm /etc/nginx/certs/{{ $host }}.ext /etc/nginx/certs/{{ $host }}.csr /etc/nginx/certs/nginx-proxy-ca.srl
+    rm "/etc/nginx/certs/{{ $host }}.ext" "/etc/nginx/certs/{{ $host }}.csr" /etc/nginx/certs/nginx-proxy-ca.srl
 
     reload_nginx=true
 fi
